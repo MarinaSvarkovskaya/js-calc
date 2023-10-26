@@ -2,6 +2,8 @@ class Calc {
   static #value = ''
   static #NAME = 'calc'
   static #isDot = false
+  static #isResult = false
+  static #memoryValue = 0
 
   static add = (newValue) => {
     if (isNaN(this.#value[this.#value.length - 2])) {
@@ -13,13 +15,13 @@ class Calc {
       }
     }
 
-    console.log(this.#value)
     this.#value = this.#value.concat(newValue)
     this.#output()
+    console.log(this.#value)
   }
 
   static #output = () => {
-    this.#save()
+    // this.#save()
     window.output.innerHTML = this.#value
   }
 
@@ -28,51 +30,76 @@ class Calc {
       return null
     }
 
-    if (isNaN(this.#value[this.#value.length - 1])) {
-      return null
-    }
-
     this.#value = this.#value.concat('.')
     this.#output()
     this.#isDot = true
   }
 
-  static op = (opValue) => {
+  static operation = (opValue) => {
     if (isNaN(this.#value[this.#value.length - 1])) {
       return null
     }
 
     this.#value = this.#value.concat(opValue)
     this.#output()
+    console.log(this.#value)
     this.#isDot = false
   }
 
   static reset = () => {
     this.#value = ''
-    this.#isDot = false
+    this.#isDot == false
     this.#output()
   }
 
   static result = () => {
     this.#value = String(eval(this.#value))
     this.#output()
+    console.log(this.#value)
+    this.#isResult = true
+    this.memoryAdd()
   }
 
-  static #save = () => {
-    window.localStorage.setItem(this.#NAME, this.#value)
-  }
-
-  static #load = () => {
-    this.#value =
-      window.localStorage.getItem(this.#NAME) || ''
-  }
-
-  static init = () => {
-    this.#load()
+  static memoryRecall = () => {
+    this.#value = String(this.#memoryValue)
+    console.log(this.#value)
     this.#output()
-    console.log('calc is init')
+    this.#value = ''
   }
+
+  static memoryClear = () => {
+    window.localStorage.removeItem('memory')
+  }
+
+  static memoryAdd = () => {
+    if (this.#isResult) {
+      this.#memoryValue += parseFloat(this.#value)
+      window.localStorage.setItem(
+        'memory',
+        this.#memoryValue,
+      )
+      console.log(this.#value)
+      this.#isResult = false
+    }
+    this.#value = ''
+  }
+
+  // static #save = () => {
+  //   window.localStorage.setItem(this.#NAME, this.#value)
+  // }
+
+  // static #load = () => {
+  //   this.#value =
+  //     window.localStorage.getItem(this.#NAME) || ''
+  // }
+
+  // static init = () => {
+  //   this.#load()
+  //   this.#output()
+  //   console.log('Calc is init')
+  // }
 }
-Calc.init()
+
+// Calc.init()
 
 window.calc = Calc

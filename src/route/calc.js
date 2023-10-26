@@ -14,7 +14,9 @@ router.get('/', function (req, res) {
   // ↙️ cюди вводимо назву файлу з сontainer
   res.render('calc', {
     // вказуємо назву папки контейнера, в якій знаходяться наші стилі
-    style: 'calc',
+    name: 'calc',
+    component: [''],
+    title: 'calc',
     data: {},
   })
   // ↑↑ сюди вводимо JSON дані
